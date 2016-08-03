@@ -1,0 +1,19 @@
+.selected {
+  background-color: #EAF2F8;
+  font-weight:bold;
+}
+
+/* need .modal-dialog */
+.mynewModal-modal-window .modal-dialog {
+  width: 800px;
+  height: 800px;
+ 
+}
+
+.large-Modal .modal-dialog{
+  width:800px; height: 400px;
+  position: absolute;
+  top:0; bottom: 0; left: 0; right: 0;
+  margin: auto
+}
+

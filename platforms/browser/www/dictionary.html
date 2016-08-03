@@ -1,0 +1,125 @@
+	<!-- tables.html -->
+
+ <div class="container">
+    <div ng-show="loading">
+        <span style="color:gray;" class="fa fa-2x fa-cog fa-spin"></span>&nbsp;&nbsp;&nbsp;{{statusMessage}}
+    </div>
+
+     <table style="width:100%;">
+         <tr>
+             <td>
+                 <h2>
+                     <i class="fa fa-table"></i> Data Dictionary &nbsp;&nbsp;&nbsp;
+                 </h2>
+
+             </td>
+             <td style="width:300px;" align="right">
+                 <div id="imaginary_container">
+                     <div class="input-group stylish-input-group">
+                         <input type="text" class="" style="width:200px" placeholder="Type to Filter" ng-model="search">&nbsp; <i class="fa fa-filter fa-lg" style="color:gray"></i> <!--<i class="glyphicon glyphicon-search" style="color:gray"></i>-->
+                         <!--<span class="input-group-addon">
+                        <button type="submit">-->
+                         <!--</button>
+                        </span>-->
+                     </div>
+                 </div>
+             </td>
+         </tr>
+     </table>
+
+
+    <div style="color:darkgray;">
+        Data dictionary is the metadata about the report i.e. field headings - their meanings and how they relate to business terms defined in the Business Glossary.
+    </div>
+    <br />
+
+     <!-- Report dropdown-->
+     <form class="form-inline">
+         <div class="form-group">
+             <table>
+                 <tr>
+                     <td>
+                         <label for="selectReport">Select Report </label>&nbsp;&nbsp;<i class="fa fa-file-text"></i>&nbsp;
+                    </td>
+                     <td>
+                         <select class="form-control" ng-model="reportSelected" ng-options="row for row in reportList" ng-change="doSelectReport(reportSelected)" id="selectReport"></select>
+                     </td>
+                 </tr>
+             </table>
+         </div>
+     </form>
+
+         <!--
+                <label for="singleSelect"> Select Report for the list below: </label><br>
+                <table class="table" style="width:800px;">
+                    <tr>
+                        <td>
+                            <select name="singleSelect" id="singleSelect" ng-model="data.singleSelect">
+                              <option value="">Please select</option>
+                              <option value="option-1" selected>Summary Office by Region</option>
+                              <option value="option-2">Summary Office by City</option>
+                              <option value="option-2">Summary Office by State</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button class="btn btn-disabled" ng-click="doGet()" >Get Call</button>
+                            <button class="btn btn-disabled" ng-click="setRowSelected(1007)" >Set Row Selected to 1007</button>
+                            <button class="btn btn-disabled" ng-click="scrollToRow('F00197')" >scroll to row 1007</button>
+                        </td>
+                    </tr>
+                </table>
+        -->
+
+         <table class="table table-hover">
+             <thead>
+                 <tr>
+                     <!--<th>Code</th>-->
+                     <th>Report</th>
+                     <th>Heading</th>
+                     <th>Term</th>
+                     <!--<th>Term Alias</th>-->
+                     <th>Notes</th>
+                     <th><button class="btn btn-success" style="width:85px" ng-click="openModalDictionaryDetail('lg', null)"><i class="fa fa-table"></i>&nbsp;Create</button>
+                     </th>
+                 </tr>
+             </thead>
+             <tbody>
+                 <!-- odata returns a valude therefore ===  ng-repeat = "row in odata.value" -->
+                 <tr ng-repeat="row in odataData | filter: search" ng-click="setRowSelected(row.reportMapping_id)" ng-class="setRowClass(row.reportMapping_id)" id="row{{row.reportMapping_id}}">
+                     <!-- note: $index is rownumber -->
+                     <td>{{row.ReportName}}</td>
+                     <td>{{row.Column_As_Displayed}}</td>
+                     <td valign="top">
+                         <table cellpadding="0" cellspacing="0" style="border:none;" uib-tooltip="glossaryTooltip" uib-tooltip-template="'glossaryTooltipTemplate.html'">
+                             <tr>
+                                 <td style="border:none; padding:0px 0px 0px 0px"><a href="" ng-click="openModalTermUsage(row)" title="Click to view Glossary Term and Usage"><i class="fa fa-book" style="font-size:large"></i></a></td>
+                                 <td style="border:none; padding: 0px 0px 0px 0px; padding-left: 10px;"><a href="" ng-click="openModalTermUsage(row)">{{row.Glossary.Metric}}</a></td>
+                             </tr>
+                         </table>
+                     </td>
+                     <td>{{row.Notes}}</td>
+                     <!-- next line worked but did NOT two-way bind -->
+                     <!-- <td><div class="checkbox checkbox-primary"><input type="checkbox" ng-checked="table.load_YN=='Y'" ></input> -->
+                     <!-- next line worked and DID two-way bind -->
+                     <td>
+                         <button class="btn btn-info" style="width:85px" ng-click="openModalDictionaryDetail('lg', row)"><i class="fa fa-table"></i>&nbsp;View</button>
+                     </td>
+                 </tr>
+             </tbody>
+         </table>
+
+         <br />
+
+         <!-- tooltip html-->
+         <script type="text/ng-template" id="glossaryTooltipTemplate.html">
+             <div style="text-align:left;">
+                 <strong>Glossary</strong> <br />
+                 <table>
+                     <!--<tr><td>Abbreviation: </td><td>{{row.Glossary.Abbreviation}}</td></tr> -->
+                     <tr><td>Description: </td><td>{{row.Glossary.Description}}</td></tr>
+                     <tr><td>Calculation: </td><td>{{row.Glossary.Calculation}}</td></tr>
+                 </table> {{ dynamicTooltipText }}
+             </div>
+         </script>
+
+</div>
